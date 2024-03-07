@@ -2,30 +2,27 @@
 #include "decl.h"
 #include <ctype.h>
 
-extern int Line;
-extern FILE *Infile;
+extern struct FileInfo FileInfo;
 
-static int Putback = 0;
+static int pb = '\n'; // The character need to put back
 
 static int next() {
     int c;
 
-    if (Putback) {
-        c = Putback;
-        Putback = 0;
+    if (pb) {
+        c = pb;
+        pb = 0;
         return c;
     }
 
-    c = fgetc(Infile);
+    c = fgetc(FileInfo.file);
     if (c == '\n')
-        Line++;
+        FileInfo.line++;
 
     return c;
 }
 
-static void putback(int c) {
-    Putback = c;
-}
+static void putback(int c) { pb = c; }
 
 static int skip() {
     int c;
@@ -56,7 +53,7 @@ static int scanint(int c) {
  * @param t pointer to token
  * @return 1 if token valid, 0 if no tokens left
  */
-int scan(struct token *t) {
+int scan(struct Token *t) {
     int c;
 
     // Skip whitespaces.
@@ -65,6 +62,7 @@ int scan(struct token *t) {
     // Determine the token's type
     switch (c) {
     case EOF:
+        t->token = T_EOF;
         return 0;
     case '+':
         t->token = T_PLUS;
@@ -84,7 +82,8 @@ int scan(struct token *t) {
             t->value = scanint(c);
             break;
         }
-        printf("Unrecognized token %c on line %d\n", c, Line);
+        printf("Unrecognized token %c on line %d\n", c, FileInfo.line);
+        exit(1);
     }
 
     // Found a token.

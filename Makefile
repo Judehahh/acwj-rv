@@ -1,7 +1,7 @@
 SRCS = src/*.c
 
-scanner: $(SRCS)
-	cc -o scanner -g -I include $(SRCS)
+jcc: $(SRCS)
+	cc -o jcc -g -I include $(SRCS)
 
 clean:
-	rm -rf scanner *.o
+	rm -rf jcc *.o

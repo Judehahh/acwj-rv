@@ -3,4 +3,7 @@
 .cache/
 .ccls
 .ccls-cache/
+.clang-format
 compile_commands.json
+
+jcc

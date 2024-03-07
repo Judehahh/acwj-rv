@@ -1,36 +1,30 @@
 #include "defs.h"
 #include "decl.h"
 
-int Line = 0;
-FILE *Infile;
+struct FileInfo FileInfo;
 
 char *tokstr[] = {
     "+", "-", "*", "/", "intlit",
 };
 
-static void scanfile() {
-  struct token T;
-
-  while (scan(&T)) {
-    printf("Token %s", tokstr[T.token]);
-    if (T.token == T_INTLIT)
-      printf(", value %d", T.value);
-    printf("\n");
-  }
-}
-
 int main(int argc, char **argv) {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s file\n", argv[0]);
-    exit(1);
-  }
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s file\n", argv[0]);
+        exit(1);
+    }
 
-  Infile = fopen(argv[1], "r");
-  if (Infile == NULL) {
-    fprintf(stderr, "Unable to open %s: %s\n", argv[1], strerror(errno));
-    exit(1);
-  }
+    FileInfo.line = 1;
+    FileInfo.file = fopen(argv[1], "r");
+    if (FileInfo.file == NULL) {
+        fprintf(stderr, "Unable to open %s: %s\n", argv[1], strerror(errno));
+        exit(1);
+    }
 
-  scanfile();
-  exit(0);
+    struct Token token;
+    scan(&token); // get the first token
+    struct ASTnode *tree = parse(&token);
+
+    printf("%d\n", dumpAST(tree));
+
+    exit(0);
 }
