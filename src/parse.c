@@ -9,8 +9,8 @@ static struct ASTnode *primary(struct Token *t) {
 
     switch (t->token) {
     case T_INTLIT:
-        n = mkleaf(A_INTLIT, t->value);
-        scan(t);
+        n = mkLeaf(A_INTLIT, t->value);
+        nextToken(t);
         return n;
     default:
         fprintf(stderr, "Syntax error on line %d\n", FileInfo.line);
@@ -38,6 +38,7 @@ int getop(int tok) {
     }
 }
 
+// Return the priority of operators.
 static int getOpPriority(int tokentype) {
     switch (tokentype) {
     case T_PLUS:
@@ -67,9 +68,9 @@ struct ASTnode *parse(struct Token *t, int ptp) {
         return lhs;
 
     while (getOpPriority(tokentype) > ptp) {
-        scan(t);
+        nextToken(t);
         rhs = parse(t, getOpPriority(tokentype));
-        lhs = mknode(getop(tokentype), lhs, rhs, 0);
+        lhs = mkNode(getop(tokentype), lhs, rhs, 0);
 
         tokentype = t->token;
         if (tokentype == T_EOF)

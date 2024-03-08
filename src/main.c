@@ -20,11 +20,19 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
+    FILE *outFile = fopen("main.S", "w");
+    // Create the output file
+    if (outFile == NULL) {
+        fprintf(stderr, "Unable to create main.S: %s\n", strerror(errno));
+        exit(1);
+    }
+
     struct Token token;
-    scan(&token); // get the first token
+    nextToken(&token); // get the first token
     struct ASTnode *tree = parse(&token, 0);
 
     printf("%d\n", dumpAST(tree));
+    genCode(outFile, tree);
 
     exit(0);
 }

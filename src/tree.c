@@ -2,7 +2,7 @@
 #include "decl.h"
 
 // Make a new AST node.
-struct ASTnode *mknode(int op, struct ASTnode *lhs, struct ASTnode *rhs,
+struct ASTnode *mkNode(int op, struct ASTnode *lhs, struct ASTnode *rhs,
                        int value) {
     struct ASTnode *n;
 
@@ -21,8 +21,8 @@ struct ASTnode *mknode(int op, struct ASTnode *lhs, struct ASTnode *rhs,
 }
 
 // Make a new AST leaf.
-struct ASTnode *mkleaf(int op, int value) {
-    return mknode(op, NULL, NULL, value);
+struct ASTnode *mkLeaf(int op, int value) {
+    return mkNode(op, NULL, NULL, value);
 }
 
 // Characters used to dump AST.

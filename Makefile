@@ -4,4 +4,4 @@ jcc: $(SRCS)
 	cc -o jcc -g -I include $(SRCS)
 
 clean:
-	rm -rf jcc *.o
+	rm -rf jcc *.o main.S a.out

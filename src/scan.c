@@ -22,7 +22,7 @@ static int next() {
     return c;
 }
 
-static void putback(int c) { pb = c; }
+static void putBack(int c) { pb = c; }
 
 static int skip() {
     int c;
@@ -35,7 +35,7 @@ static int skip() {
     return c;
 }
 
-static int scanint(int c) {
+static int scanInt(int c) {
     int val = 0;
 
     while (isdigit(c)) {
@@ -44,7 +44,7 @@ static int scanint(int c) {
     }
 
     // Put the non-integer character back.
-    putback(c);
+    putBack(c);
     return val;
 }
 
@@ -53,7 +53,7 @@ static int scanint(int c) {
  * @param t pointer to token
  * @return 1 if token valid, 0 if no tokens left
  */
-int scan(struct Token *t) {
+int nextToken(struct Token *t) {
     int c;
 
     // Skip whitespaces.
@@ -79,7 +79,7 @@ int scan(struct Token *t) {
     default:
         if (isdigit(c)) {
             t->token = T_INTLIT;
-            t->value = scanint(c);
+            t->value = scanInt(c);
             break;
         }
         printf("Unrecognized token %c on line %d\n", c, FileInfo.line);
