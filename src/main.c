@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
 
     struct Token token;
     scan(&token); // get the first token
-    struct ASTnode *tree = parse(&token);
+    struct ASTnode *tree = parse(&token, 0);
 
     printf("%d\n", dumpAST(tree));
 

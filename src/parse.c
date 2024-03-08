@@ -38,22 +38,43 @@ int getop(int tok) {
     }
 }
 
+static int getOpPriority(int tokentype) {
+    switch (tokentype) {
+    case T_PLUS:
+    case T_MINUS:
+        return 10;
+    case T_STAR:
+    case T_SLASH:
+        return 20;
+    default:
+        fprintf(stderr, "syntax error on line %d, token %d\n", FileInfo.line,
+                tokentype);
+        exit(1);
+    }
+}
+
 // Return an AST tree whose root is a binary operator.
-struct ASTnode *parse(struct Token *t) {
-    struct ASTnode *n, *lhs, *rhs;
+// prp: previous token's priotiry
+struct ASTnode *parse(struct Token *t, int ptp) {
+    struct ASTnode *lhs, *rhs;
     int nodetype;
+    int tokentype;
 
     lhs = primary(t);
 
-    if (t->token == T_EOF)
+    tokentype = t->token;
+    if (tokentype == T_EOF)
         return lhs;
 
-    nodetype = getop(t->token); // get the operator of root node
+    while (getOpPriority(tokentype) > ptp) {
+        scan(t);
+        rhs = parse(t, getOpPriority(tokentype));
+        lhs = mknode(getop(tokentype), lhs, rhs, 0);
 
-    // Get the next token and parse it.
-    scan(t);
-    rhs = parse(t);
+        tokentype = t->token;
+        if (tokentype == T_EOF)
+            return lhs;
+    }
 
-    n = mknode(nodetype, lhs, rhs, 0);
-    return n;
+    return lhs;
 }
