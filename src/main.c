@@ -29,10 +29,16 @@ int main(int argc, char **argv) {
 
     struct Token token;
     nextToken(&token); // get the first token
-    struct ASTnode *tree = parse(&token, 0);
+    while (1) {
+        expectToken(&token, T_RETURN, "return");
+        struct ASTnode *tree = parse(&token, 0);
+        genCode(outFile, tree);
+        printf("%d\n", dumpAST(tree));
+        expectToken(&token, T_SEMI, ";");
 
-    printf("%d\n", dumpAST(tree));
-    genCode(outFile, tree);
+        if (token.token == T_EOF)
+            break;
+    }
 
     exit(0);
 }

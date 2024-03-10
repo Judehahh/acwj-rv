@@ -21,6 +21,9 @@ enum {
     T_SLASH,  // '/'
     T_INTLIT, // integer literal
 
+    T_SEMI,   // ';'
+    T_RETURN, // keyword_return
+
     T_EOF, // end of file
 };
 

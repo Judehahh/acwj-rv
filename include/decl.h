@@ -4,6 +4,7 @@
 #include "defs.h"
 
 int nextToken(struct Token *t);
+void expectToken(struct Token *t, int expected, char *what);
 
 struct ASTnode *mkNode(int op, struct ASTnode *lhs, struct ASTnode *rhs,
                        int value);

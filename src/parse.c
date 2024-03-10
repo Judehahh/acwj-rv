@@ -64,7 +64,7 @@ struct ASTnode *parse(struct Token *t, int ptp) {
     lhs = primary(t);
 
     tokentype = t->token;
-    if (tokentype == T_EOF)
+    if (tokentype == T_SEMI)
         return lhs;
 
     while (getOpPriority(tokentype) > ptp) {
@@ -73,7 +73,7 @@ struct ASTnode *parse(struct Token *t, int ptp) {
         lhs = mkNode(getop(tokentype), lhs, rhs, 0);
 
         tokentype = t->token;
-        if (tokentype == T_EOF)
+        if (tokentype == T_SEMI)
             return lhs;
     }
 
